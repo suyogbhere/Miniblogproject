@@ -1,0 +1,14 @@
+INFO 2024-10-02 18:57:00,502 views I print on city.log upper
+ERROR 2024-10-02 18:57:00,502 views I print on post.log upper
+INFO 2024-10-02 19:00:04,933 views I print on city.log upper
+ERROR 2024-10-02 19:00:04,933 views I print on post.log upper
+INFO 2024-10-02 19:01:29,536 views I print on city.log upper
+ERROR 2024-10-02 19:01:29,536 views I print on post.log upper
+ERROR 2024-10-02 19:07:22,624 views Hiii
+ERROR 2024-10-02 19:15:21,222 views Hiii (Line: 41)
+ERROR 2024-10-02 19:21:56,518 views Hiii (Line: 42)
+ERROR 2024-10-02 19:23:05,843 views Hiii (Line: 42)
+INFO 2024-10-02 19:25:29,072 views I print on post.log upper (Line: 26)
+ERROR 2024-10-02 19:25:29,072 views I print on post.log upper (Line: 27)
+ERROR 2024-10-02 19:25:31,217 views Error (Line: 45)
+ERROR 2024-10-02 19:32:58,218 views Error (Line: 45)

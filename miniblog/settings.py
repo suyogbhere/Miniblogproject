@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -124,3 +125,278 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Define the folder where logs will be stored
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+#Django_logger
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False if DEBUG else True,
+    "formatters": {          #Format for displaying log information
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message} (Line: {lineno})",
+            # "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message} (Line: {lineno})",
+            "style": "{",
+            # "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            # Logging Level + Time Date + Module Name + Function Name + Line No + Logging Message 
+        },
+    },
+
+     "filters": {       # filter logs
+        "require_debug_true": {      # django does not output logs until debug mode
+            "()": "django.utils.log.RequireDebugTrue",     
+        },
+    },
+
+    "handlers": {      # Log Processing Method
+        'console': {     # Output log to terminal  
+            "level": "DEBUG" if DEBUG else "INFO",
+            "filters": ["require_debug_true"],        # debug is true before output
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+            "formatter": "simple",
+        },
+
+        'info': {    # output log to file 
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename':  os.path.join(LOG_DIR, 'info.log'),   # Location of log file
+            'formatter':'verbose',
+            'maxBytes':  1024 * 1024 * 50,   #  log size 50M 
+            'encoding': 'utf-8'
+        },
+
+        'demo':{    # Specially define a log to collect specific information
+            "level": 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',    # Save the file to auto-cut
+            'filename':  os.path.join(BASE_DIR, 'info.log'),   # Location of log file
+            'maxBytes':  1024 * 1024 * 50,   #  log size 50M 
+            'backupCount': 3,
+            'formatter':'verbose',
+            'encoding': 'utf-8'
+        },
+
+        'post':{    # Specially define a log to collect specific information
+            "level": 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',    # Save the file to auto-cut
+            'filename':  os.path.join(LOG_DIR, 'post.log'),   # Location of log file
+            'maxBytes':  1024 * 1024 * 50,   #  log size 50M 
+            'backupCount': 5,
+            'formatter':'verbose',
+            'encoding': 'utf-8'
+        },
+    },
+
+     "loggers": {       # logger
+        "django": {             # The default logger application is configured as follows
+            "handlers": ["info" ,"console"],
+            "propagate": True,
+            "level":"INFO"
+        },
+
+        "demo_log": {             # The logger name "demo" is also handled seperately
+            "handlers": ['demo'],
+            "propagate": True,
+            "level":"INFO"
+        },
+
+        "post_log": {             # The logger name "post" is also handled seperately
+            "handlers": ['post'],
+            "propagate": True,
+            "level":"INFO"
+        },
+     },
+ 
+
+ }
+
+
+
+
+
+
+
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#         # You can add more loggers here for other parts of your application
+#     },
+# }
+
+
+# --------------------------------------------------------------------------------
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,  # Allows other loggers (like Django's default) to still work
+#     'handlers': {
+#         'demo': {
+#             'level': 'DEBUG',  # Set the logging level
+#             'class': 'logging.StreamHandler',  # Send logs to console
+#             'formatter': 'simple',  # Use the 'simple' format defined below
+#         },
+#     },
+#     'formatters': {
+#         'simple': {
+#             'format': '{levelname} {message}',
+#             # "format": "%(levelname)s %(asctime)s %(module)s %(lineno)s %(message)s",
+#             'style': '{',  # Using new-style formatting
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['demo'],  # Assign the 'demo' handler to the 'django' logger
+#             'level': 'DEBUG',  # Set the logging level for Django
+#             'propagate': True,
+#         },
+#     },
+# }
+ 
+
+
+
+# ------------------------------------------------------------------------------------------------
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False if DEBUG else True,
+#     "formatters": {          #Format for displaying log information
+#         "verbose": {
+#             # "format": "%(levelname)s %(asctime)s %(module)s %(lineno)s %(message)s",
+#             "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+#             # "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+#             "style": "{",
+#         },
+#         "simple": {
+#             "format": "{levelname} {message}",
+#             # 'format': '%(levelname)s  %(asctime)s  %(module)s %(funcName)s %(lineno)d %(message)s ',
+#             "style": "{",
+#             # "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+#             # Logging Level + Time Date + Module Name + Function Name + Line No + Logging Message 
+#         },
+#     },
+#     "filters": {       # filter logs
+#         # "special": {          
+#         #     "()": "project.logging.SpecialFilter",
+#         #     "foo": "bar",
+#         # },
+#         "require_debug_true": {      # django does not output logs until debug mode
+#             "()": "django.utils.log.RequireDebugTrue",     
+#         },
+#     },
+
+#     "handlers": {      # Log Processing Method
+#         'console': {     # Output log to terminal  
+#             "level": "DEBUG" if DEBUG else "INFO",
+#             "filters": ["require_debug_true"],        # debug is true before output
+#             "class": "logging.StreamHandler",
+#             "formatter": "verbose",
+#             "formatter": "simple",
+#         },
+
+#         'info': {    # output log to file 
+#             "level": 'INFO',
+#             # 'class': 'logging.handlers.RotatingFileHandler',
+#              "class": "logging.StreamHandler",
+#             'filename':  os.path.join(BASE_DIR, 'log/info.log'),   # Location of log file
+#             'maxBytes':  300 * 1024 * 1024,   # 300M size
+#             'backupCount': 10,
+#             'formatter':'verbose',
+#             'encoding': 'utf-8'
+#         },
+
+#         # 'demo':{    # Specially define a log to collect specific information
+#         #     "level": 'INFO',
+#         #     # 'class': 'logging.handlers.RotatingFileHandler',    # Save the file to auto-cut
+#         #      "class": "logging.StreamHandler",
+#         #     'filename':  os.path.join(BASE_DIR, 'log/info.log'),   # Location of log file
+#         #     'maxBytes':  1024 * 1024 * 50,   #  log size 50M 
+#         #     'backupCount': 5,
+#         #     'formatter':'verbose',
+#         #     'encoding': 'utf-8'
+#         # },
+
+
+#         'post':{    # Specially define a log to collect specific information
+#             "level": 'INFO',
+#             # 'class': 'logging.handlers.RotatingFileHandler',    # Save the file to auto-cut
+#              "class": "logging.StreamHandler",
+#             'filename':  os.path.join(BASE_DIR, 'log/post.log'),   # Location of log file
+#             'maxBytes':  1024 * 1024 * 50,   #  log size 50M 
+#             'backupCount': 5,
+#             'formatter':'verbose',
+#             'encoding': 'utf-8'
+#         },
+
+#         # "mail_admins": {
+#         #     "level": "ERROR",
+#         #     "class": "django.utils.log.AdminEmailHandler",
+#         #     "filters": ["special"],
+#         # },
+#     },
+
+#     "loggers": {       # logger
+#         "django": {             # The default logger application is configured as follows
+#             "handlers": ["info" ,"console"],
+#             "propagate": True,
+#             "level":"INFO"
+#         },
+
+#         # "demo_log": {             # The logger name "demo" is also handled seperately
+#         #     "handlers": ['demo'],
+#         #     "propagate": True,
+#         #     "level":"INFO"
+#         # },
+
+
+#         "post_log": {             # The logger name "post" is also handled seperately
+#             "handlers": ['post'],
+#             "propagate": True,
+#             "level":"INFO"
+#         },
+
+
+#     #     "django.request": {
+#     #         "handlers": ["mail_admins"],
+#     #         "level": "ERROR",
+#     #         "propagate": False,
+#     #     },
+#     #     "myproject.custom": {
+#     #         "handlers": ["console", "mail_admins"],
+#     #         "level": "INFO",
+#     #         "filters": ["special"],
+#     #     },
+#     # },
+#     # "handlers": {
+#     #     "file": {
+#     #         "level": "DEBUG",
+#     #         "class": "logging.FileHandler",
+#     #         "filename": "/path/to/django/debug.log",
+#     #     },
+#     # },
+#     # "loggers": {
+#     #     "django": {
+#     #         "handlers": ["file"],
+#     #         "level": "DEBUG",
+#     #         "propagate": True,
+#     #     },
+#     },
+# }

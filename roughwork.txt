@@ -1,0 +1,19 @@
+
+        if form.password1 == form.password2:
+            if User.objects.filter(username=form.username).exists():
+                messages.error(request, 'Username already exists!')
+                return HttpResponseRedirect('login')
+            else:
+                if User.objects.filter(email=form.email).exists():
+                    messages.error(request, 'Email already exists!')
+                    return HttpResponseRedirect('signup')
+                else:
+                    if form.is_valid():
+                        messages.success(request,'Congratulation !! You have become author')
+                        form.save()
+        else:
+            messages.error(request, 'Password do not match')
+            return HttpResponseRedirect('signup')
+    else:
+        form=SignupForm()
+    return render(request,'blog/signup.html',{"form":form})

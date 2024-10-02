@@ -1,6 +1,9 @@
+
+from django.forms.models import ModelForm
+from blog.models import Post
 from django import forms
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm, UsernameField
-from  django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django.db import models
 from django.forms import fields
 from django.forms import widgets
@@ -20,4 +23,15 @@ class SignupForm(UserCreationForm):
                  "email":forms.EmailInput(attrs={"class":"form-control"}),}
 
 class LoginForm(AuthenticationForm):
-    username=UsernameField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    username=UsernameField(widget=forms.TextInput(attrs={"class":"form-control","autofocus":True}))
+    password=fields.CharField(widget=forms.PasswordInput(attrs={"class":"form-control","autofocus":True}))
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields=['title','desc']
+        labels={'title':'title','desc':'Description'}
+        widgets={'title':forms.TextInput(attrs={'class':'form-control'}),
+                'desc':forms.Textarea(attrs={'class':'form-control'})}
+

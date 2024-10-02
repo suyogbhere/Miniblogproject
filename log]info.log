@@ -1,0 +1,2 @@
+INFO 2024-10-02 18:38:07,248 autoreload 11072 1640 Watching for file changes with StatReloader
+INFO 2024-10-02 18:38:08,815 autoreload 11072 1640 D:\Programming\My_Django_Project\miniblog\miniblog\settings.py changed, reloading.

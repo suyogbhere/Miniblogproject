@@ -28,5 +28,8 @@ urlpatterns = [
     path("dashboard/",views.Dashboard,name="dashboard"),
     path("signup/",views.User_Signup,name="signup"),
     path("login/",views.Login,name="login"),
-    path("logout/",views.User_logout,name="logout")
+    path("logout/",views.User_logout,name="logout"),
+    path("addpost/",views.add_post,name="addpost"),
+    path("updatepost/<int:id>/",views.update_post,name="updatepost"),
+    path("delete/<int:id>/",views.delete_post,name="deletepost"),
 ]
